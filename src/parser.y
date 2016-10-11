@@ -146,10 +146,12 @@ fs::path parser_sourcefile;
 input:    /* empty */
         | TOK_USE opt_as_clause
             {
-              rootmodule->registerUse(std::string($1));
+              if ($2) {
+                  rootmodule->registerUse(std::string($1), std::string($2));
+              } else {
+                  rootmodule->registerUse(std::string($1));
+              }
               free($1);
-
-              // TODO: actually handle the as clause if present
               free($2);
             }
           input
@@ -159,7 +161,7 @@ input:    /* empty */
 opt_as_clause:
           /* empty */
             {
-              return NULL;
+              $$ = NULL;
             }
         | '=' TOK_ID
             {

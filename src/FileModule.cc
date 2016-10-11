@@ -47,7 +47,7 @@ std::string FileModule::dump(const std::string &indent, const std::string &name)
 	return scope.dump(indent);
 }
 
-void FileModule::registerUse(const std::string path) {
+void FileModule::registerUse(const std::string path, const std::string as_namespace) {
 	std::string extraw = fs::path(path).extension().generic_string();
 	std::string ext = boost::algorithm::to_lower_copy(extraw);
 	
@@ -59,6 +59,9 @@ void FileModule::registerUse(const std::string path) {
 		}
 	} else {
 		usedlibs.insert(path);
+		if (!as_namespace.empty()) {
+			ns_alias_map[as_namespace] = path;
+		} 
 	}
 }
 

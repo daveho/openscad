@@ -21,7 +21,7 @@ public:
 
 void setModulePath(const std::string &path) { this->path = path; }
 	const std::string &modulePath() const { return this->path; }
-        void registerUse(const std::string path);
+        void registerUse(const std::string path, const std::string as_namespace = "");
 	void registerInclude(const std::string &localpath, const std::string &fullpath);
 	bool includesChanged() const;
 	bool handleDependencies();
@@ -45,4 +45,10 @@ private:
 	IncludeContainer includes;
 	bool is_handling_dependencies;
 	std::string path;
+	
+	// Map of namespace aliases to module filenames.
+	// (Each key in this map has a member of usedlibs as its
+	// corresponding value.)
+	typedef std::unordered_map<std::string, std::string> NamespaceAliasMap;
+	NamespaceAliasMap ns_alias_map;
 };
