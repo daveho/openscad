@@ -137,19 +137,34 @@ fs::path parser_sourcefile;
 %type <arg> argument_call
 %type <arg> argument_decl
 %type <text> module_id
+%type <text> opt_as_clause
 
 %debug
 
 %%
 
 input:    /* empty */
-        | TOK_USE
+        | TOK_USE opt_as_clause
             {
               rootmodule->registerUse(std::string($1));
               free($1);
+
+              // TODO: actually handle the as clause if present
+              free($2);
             }
           input
         | statement input
+        ;
+
+opt_as_clause:
+          /* empty */
+            {
+              return NULL;
+            }
+        | '=' TOK_ID
+            {
+              $$ = $2;
+            }
         ;
 
 statement:
