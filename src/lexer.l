@@ -237,6 +237,8 @@ use[ \t\r\n>]*"<"	{ BEGIN(cond_use); }
 "&&"	return AND;
 "||"	return OR;
 
+"::"	return SCOPE;
+
 . { return yytext[0]; }
 
 %%

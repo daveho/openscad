@@ -103,6 +103,9 @@ fs::path parser_sourcefile;
 %token TOK_FALSE
 %token TOK_UNDEF
 
+// This is the "::" operator for qualifying a name with a module alias.
+%token SCOPE
+
 %token LE GE EQ NE AND OR
 
 %right LET
@@ -339,6 +342,13 @@ expr:
             {
               $$ = new Lookup($1, LOC(@$));
                 free($1);
+            }
+        | TOK_ID SCOPE TOK_ID
+            {
+              // TODO: QualifiedLookup
+              $$ = new Lookup($3, LOC(@$));
+              free($1);
+              free($3);
             }
         | expr '.' TOK_ID
             {
